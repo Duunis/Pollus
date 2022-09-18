@@ -1,11 +1,7 @@
 use worker::*;
 
+mod routes;
 mod utils;
-
-fn get_index(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
-    console_log!("BIGGUS POLLUS");
-    return Response::ok("Hello");
-}
 
 #[event(fetch)]
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
@@ -14,7 +10,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let router = Router::new();
 
     router
-        .get("/", get_index)
+        .get_async("/", routes::index::get)
         .run(req, env)
-        .await        
+        .await
 }
