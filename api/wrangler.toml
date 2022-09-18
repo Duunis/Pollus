@@ -1,11 +1,10 @@
 name = "pollus"
-workers_dev = true
-
 main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
 
 [vars]
 WORKERS_RS_VERSION = "0.0.9"
 
-# [build]
-# command = "cargo install -q worker-build && worker-build --release"
+[[kv_namespaces]]
+  binding = "POLLUS"
+  id = "3aee7077fd8a4caf8deaf0383276b0ed"
