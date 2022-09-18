@@ -44,10 +44,6 @@ jobs:
         workingDirectory: api
         apiToken: ${{ secrets.CF_API_TOKEN }}
         accountId: ${{ secrets.CF_ACCOUNT_ID }}
-    
-    - run: pwd
-    - run: ls -al
-    - run: ls -al ..
 
     - name: Post-Deploy ⛈
-      run: sudo chown -R $USER:$USER api/.wrangler
+      run: sudo chown -R $USER:$USER ../.wrangler
