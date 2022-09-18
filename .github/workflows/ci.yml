@@ -47,6 +47,7 @@ jobs:
     
     - run: pwd
     - run: ls -al
+    - run: ls -al ..
 
     - name: Post-Deploy ⛈
       run: sudo chown -R $USER:$USER api/.wrangler
