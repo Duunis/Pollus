@@ -46,4 +46,4 @@ jobs:
         accountId: ${{ secrets.CF_ACCOUNT_ID }}
     
     - name: Post-Deploy ⛈
-      run: sudo chown -R $USER:$USER .wrangler
+      run: sudo chown -R $USER:$USER ${{ env.GITHUB_WORKSPACE }}/.wrangler
