@@ -13,6 +13,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      working-directory: api
+
     steps:
     - uses: actions/checkout@v3
     
