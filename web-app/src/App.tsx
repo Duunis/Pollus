@@ -1,19 +1,16 @@
-import styled from 'styled-components/macro'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-const FancyButton = styled.button`
-  background: pink;
-  
-  :hover {
-    width: 10rem;
-    height: 10rem;
-  }
-`
+import Landing from './screens/Landing'
 
-export default function App() {
+const App: React.FC = () => {
   return (
-    <div>
-      Hello, world!
-      <FancyButton>Button</FancyButton>
-    </div>
-  );
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+      </Routes>
+    </Router>
+  )
 }
+
+export default App
