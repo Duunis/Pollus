@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 const LandingContainer = styled.div`
@@ -23,6 +24,7 @@ const LandingButton = styled.button`
   cursor: pointer;
   background: #fff;
   display: block;
+  position: relative;
   width: 20em;
   height: 5em;
   border: none;
@@ -50,10 +52,12 @@ const Logo: React.FC = () => {
 }
 
 const LandingButtons: React.FC = () => {
+  const navigate = useNavigate()
+
   return (
     <LandingButtonsContainer>
-      <LandingButton><span>🏗️ Build</span></LandingButton>
-      <LandingButton><span>🛠️ Edit</span></LandingButton>
+      <LandingButton onClick={() => navigate('/build')}><span>🏗️ Build</span></LandingButton>
+      <LandingButton onClick={() => navigate('/edit')}><span>🛠️ Edit</span></LandingButton>
     </LandingButtonsContainer>
   )
 }
