@@ -11,6 +11,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
     router
         .get_async("/", routes::index::get)
+        .get_async("/quiz/:id", routes::quiz::get_id)
         .run(req, env)
         .await
 }
