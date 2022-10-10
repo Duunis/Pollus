@@ -1,7 +1,7 @@
 use worker::*;
 
-use crate::RequestContext;
+use crate::RequestData;
 
-pub async fn post_id(_req: Request, _ctx: RouteContext<RequestContext>) -> Result<Response> {
+pub async fn post(_req: Request, _ctx: RouteContext<RequestData>) -> Result<Response> {
     return Response::ok("OK");
 }
