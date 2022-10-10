@@ -3,11 +3,7 @@ use worker::*;
 mod routes;
 mod utils;
 
-fn read_admin_key(request: Request) -> Option<String> {
-    return request.headers().get("Authorization").unwrap();
-}
-
-struct RequestContext {
+pub struct RequestContext {
     admin_key: Option<String>,
 }
 
@@ -16,7 +12,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     utils::set_panic_hook();
 
     let context = RequestContext {
-        admin_key: read_admin_key(req)
+        admin_key: req.headers().get("Authorization").unwrap()
     };
 
     let router = Router::with_data(context);
