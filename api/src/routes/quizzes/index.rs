@@ -1,6 +1,8 @@
 use worker::*;
 
-pub async fn get_id(_req: Request, ctx: RouteContext<()>) -> Result<Response> {
+use crate::RequestContext;
+
+pub async fn get_id(_req: Request, ctx: RouteContext<RequestContext>) -> Result<Response> {
     if let Some(id) = ctx.param("id") {
         console_log!("id: {}", id);
         return Response::ok("Ok");

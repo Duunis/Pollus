@@ -1,2 +1,2 @@
-pub mod index;
-pub mod quiz;
+pub mod admin;
+pub mod quizzes;

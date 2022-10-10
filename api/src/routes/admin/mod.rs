@@ -1,1 +1,1 @@
-pub mod quiz;
+pub mod quizzes;
