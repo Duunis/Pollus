@@ -1,41 +1,27 @@
 import { z } from 'zod'
+import { Quiz } from '../../interfaces/quiz'
 
-const PostQuizRequestModelSchema = z.object({
+const PostRequestSchema = z.object({
   title: z.string(),
   questions: z.object({
     text: z.string()
   }).array()
 })
 
-const PostQuizResponseModelSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  secret: z.string(),
-  questions: z.object({
-    id: z.string(),
-    text: z.string()
-  }).array()
-})
+interface PostResponse {
+  id: string
+  title: string
+  secret: string
+  questions: Array<{
+    id: string
+    text: string
+  }>
+}
 
-type PostQuizResponseModel = z.infer<typeof PostQuizResponseModelSchema>
-
-const QuizSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  secret: z.string(),
-  questions: z.object({
-    id: z.string(),
-    text: z.string()
-  }).array(),
-  createdAt: z.string(),
-  updatedAt: z.string()
-})
-
-type Quiz = z.infer<typeof QuizSchema>
-
-export const onRequestPost: Handler = async (ctx) => {
+export const onRequestPost: Handler = async ctx => {
   const body = await ctx.request.json()
-  const validation = PostQuizRequestModelSchema.safeParse(body)
+
+  const validation = PostRequestSchema.safeParse(body)
   if (!validation.success) return new Response(validation.error.message, { status: 400 })
 
   const model = validation.data
@@ -56,7 +42,7 @@ export const onRequestPost: Handler = async (ctx) => {
   const value = JSON.stringify(quiz)
   await ctx.env.POLLUS.put(key, value)
 
-  const response: PostQuizResponseModel = {
+  const response: PostResponse = {
     id: quiz.id,
     title: quiz.title,
     secret: quiz.secret,
