@@ -3,27 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.59",
-    "@types/react": "^18.0.20",
-    "@types/react-dom": "^18.0.6",
     "axios": "^0.27.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.1",
-    "react-scripts": "5.0.1",
     "styled-components": "^5.3.5",
-    "typescript": "^4.8.3",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zod": "^3.19.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "wrangler pages dev --proxy 8080 -- vite --port 8080",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "playwright test"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +36,15 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.26"
+    "@cloudflare/workers-types": "^3.18.0",
+    "@playwright/test": "^1.27.1",
+    "@types/node": "^16.11.59",
+    "@types/react": "^18.0.20",
+    "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.26",
+    "@vitejs/plugin-react": "^2.2.0",
+    "typescript": "^4.8.3",
+    "vite": "^3.2.2",
+    "wrangler": "https://prerelease-registry.developers.workers.dev/runs/2817502815/npm-package-wrangler-1616"
   }
 }
