@@ -7,7 +7,7 @@ const config: Config = {
   },
   use: {
     baseURL: 'http://localhost:8788',
-    headless: false
+    headless: true
   }
 }
 
