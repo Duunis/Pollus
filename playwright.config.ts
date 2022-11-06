@@ -6,7 +6,6 @@ const config: Config = {
     port: 8788
   },
   use: {
-    baseURL: 'http://localhost:8788',
     headless: true
   }
 }
