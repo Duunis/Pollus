@@ -18,14 +18,17 @@ jobs:
         node-version: 16.16.0
         cache: npm
     
-    - name: Install ⚙️
+    - name: Install dependencies ⚙️
       run: npm ci
 
-    - name: Build 🔨
+    - name: Build project 🔨
       run: npm run build
 
-    - name: Test 🧪
+    - name: Install browsers 🖱
+      run: npx playwright install --with-deps
+
+    - name: Run tests 🧪
       run: npm run test
 
-    - name: Publish 🌥
+    - name: Publish project 🌥
       run: npm run publish
