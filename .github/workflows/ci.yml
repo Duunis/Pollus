@@ -19,7 +19,7 @@ jobs:
         cache: npm
     
     - name: Install ⚙️
-      run: npm run ci
+      run: npm ci
 
     - name: Build 🔨
       run: npm run build
