@@ -1,7 +1,7 @@
 export {}
 
 interface Bindings {
-  POLLUS: KVNamespace
+  STORE: KVNamespace
 }
 
 declare global {

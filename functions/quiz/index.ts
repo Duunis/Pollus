@@ -40,7 +40,7 @@ export const onRequestPost: Handler = async ctx => {
 
   const key = `quiz#${quiz.id}`
   const value = JSON.stringify(quiz)
-  await ctx.env.POLLUS.put(key, value)
+  await ctx.env.STORE.put(key, value)
 
   const response: PostResponse = {
     id: quiz.id,
