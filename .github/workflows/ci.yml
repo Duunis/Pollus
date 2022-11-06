@@ -3,35 +3,35 @@ name: CI
 on:
   push:
     branches: [ "main" ]
-    
+
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    container:
+      image: mcr.microsoft.com/playwright:v1.27.1-focal
+
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16.16.0
-        cache: npm
-    
-    - name: Install dependencies ⚙️
-      run: npm ci
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.16.0
+          cache: npm
+      
+      - name: Install dependencies ⚙️
+        run: npm ci
 
-    - name: Build project 🔨
-      run: npm run build
+      - name: Build project 🔨
+        run: npm run build
 
-    - name: Install browsers 🖱
-      run: npx playwright install --with-deps
+      - name: Run tests 🧪
+        run: npm run test
 
-    - name: Run tests 🧪
-      run: npm run test
-
-    - name: Publish project 🌥
-      run: npm run publish
-      env:
-        CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+      - name: Publish project 🌥
+        run: npm run publish
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
