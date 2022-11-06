@@ -10,27 +10,40 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    container:
-      image: mcr.microsoft.com/playwright:v1.27.1-focal
-
     steps:
       - uses: actions/checkout@v3
+
+      - name: Get Playwright Version 🎭
+        id: playwright-version
+        run: echo -n "::set-output name=version::$(npm ls @playwright/test --json | jq --raw-output '.dependencies["@playwright/test"].version')"
+
+      - name: Cache Browsers 🎂
+        id: cache-cache
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
 
       - uses: actions/setup-node@v3
         with:
           node-version: 16.16.0
           cache: npm
       
-      - name: Install dependencies ⚙️
+      - name: Install Dependencies ⚙️
         run: npm ci
 
-      - name: Build project 🔨
+      - name: Build Project 🔨
         run: npm run build
 
-      - name: Run tests 🧪
+      - name: Download Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install
+
+
+      - name: Run Tests 🧪
         run: npm run test
 
-      - name: Publish project 🌥
+      - name: Publish Project 🌥
         run: npm run publish
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
