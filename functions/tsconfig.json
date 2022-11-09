@@ -9,6 +9,9 @@
     ],
     "types": [
       "@cloudflare/workers-types"
-    ]
+    ],
+    "paths": {
+      "$*": ["../*"]
+    }
   }
 }
