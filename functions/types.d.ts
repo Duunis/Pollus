@@ -1,3 +1,5 @@
+import type { PluginData } from '@cloudflare/pages-plugin-sentry'
+
 export {}
 
 interface Environment {
@@ -10,5 +12,5 @@ interface Bindings {
 }
 
 declare global {
-  type Handler = PagesFunction<Environment & Bindings>
+  type Handler = PagesFunction<Environment & Bindings, any, PluginData>
 }

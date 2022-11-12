@@ -31,18 +31,24 @@ export interface PostResponse {
 }
 
 export const onRequestPost: Handler = async ctx => {
-  const body = await ctx.request.json()
+  const bodyJson = await ctx.request.json()
+  const bodyValidation = PostRequestSchema.safeParse(bodyJson)
 
-  const validation = PostRequestSchema.safeParse(body)
-  if (!validation.success) return new Response(validation.error.message, { status: 400 })
+  if (!bodyValidation.success) {
+    ctx.data.sentry.captureMessage(JSON.stringify({
+      message: 'Invalid request body',
+      errors: bodyValidation.error.errors,
+    }), 'error')
+    return new Response(bodyValidation.error.message, { status: 400 })
+  }
 
-  const model = validation.data
+  const body = bodyValidation.data
 
   const quiz: Quiz = {
     id: crypto.randomUUID(),
-    title: model.title,
+    title: body.title,
     secret: crypto.randomUUID(),
-    questions: model.questions.map(question => ({
+    questions: body.questions.map(question => ({
       id: crypto.randomUUID(),
       text: question.text,
       choices: question.choices.map(choice => ({
@@ -54,8 +60,6 @@ export const onRequestPost: Handler = async ctx => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
-
-  JSON.parse('')
 
   const key = `quiz#${quiz.id}`
   const value = JSON.stringify(quiz)
