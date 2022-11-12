@@ -39,6 +39,8 @@ export const onRequestPost: Handler = sentry(async ctx => {
 
   const model = validation.data
 
+  throw new Error('Not implemented')
+
   const quiz: Quiz = {
     id: crypto.randomUUID(),
     title: model.title,
