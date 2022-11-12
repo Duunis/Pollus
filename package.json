@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cloudflare/pages-plugin-sentry": "^1.0.0",
     "@sentry/browser": "^7.19.0",
     "@sentry/node": "^7.19.0",
     "@sentry/tracing": "^7.19.0",
