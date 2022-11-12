@@ -8,5 +8,10 @@ export const onRequestPost: Handler = async ctx => {
     tracesSampleRate: 1.0,
   })
 
-  return new Response('OK')
+  try {
+    throw new Error('Not implemented')
+  } catch (error) {
+    Sentry.captureException(error)
+    return new Response('Internal Server Error', { status: 500 })
+  }
 }
