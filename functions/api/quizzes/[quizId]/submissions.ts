@@ -62,14 +62,22 @@ export const onRequestPost: Handler = async ctx =>  {
   if (Array.isArray(quizId)) return new Response('Internal Server Error', { status: 500 })
 
   const bodyJson = await ctx.request.json()
+
   const bodyValidation = PostRequestSchema.safeParse(bodyJson)
   if (!bodyValidation.success) return new Response(bodyValidation.error.message, { status: 400 })
+
   const body = bodyValidation.data
 
   const quizItem = await ctx.env.STORE.get(`quiz#${quizId}`, { type: 'json' })
   if (quizItem === null) return new Response('Quiz not found', { status: 404 })
+
   const quizValidation = QuizSchema.safeParse(quizItem)
-  if (!quizValidation.success) return new Response('Internal Server Error', { status: 500 })
+  if (!quizValidation.success) {
+    ctx.data.sentry.setTag('quiz_id', quizId)
+    ctx.data.sentry.captureMessage('Quiz is not valid')
+    return new Response('Internal Server Error', { status: 500 })
+  }
+
   const quiz = quizValidation.data
 
   const answersResult = body.reduce(stuff(quiz), { tag: 'ok', answers: [] })
@@ -126,8 +134,14 @@ export const onRequestGet: Handler = async ctx => {
 
   const quizItem = await ctx.env.STORE.get(`quiz#${quizId}`, { type: 'json' })
   if (quizItem === null) return new Response('Quiz not found', { status: 404 })
+
   const quizValidation = QuizSchema.safeParse(quizItem)
-  if (!quizValidation.success) return new Response('Internal Server Error', { status: 500 })
+  if (!quizValidation.success) {
+    ctx.data.sentry.setTag('quiz_id', quizId)
+    ctx.data.sentry.captureMessage('Quiz is not valid')
+    return new Response('Internal Server Error', { status: 500 })
+  }
+  
   const quiz = quizValidation.data
   
   if (quiz.secret !== secret) return new Response('Unauthorized', { status: 401 })
