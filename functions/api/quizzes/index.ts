@@ -55,7 +55,7 @@ export const onRequestPost: Handler = async ctx => {
     updatedAt: new Date().toISOString()
   }
 
-  const bug = 5 / 0
+  JSON.parse('')
 
   const key = `quiz#${quiz.id}`
   const value = JSON.stringify(quiz)
