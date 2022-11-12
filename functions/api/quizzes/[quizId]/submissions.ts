@@ -74,7 +74,7 @@ export const onRequestPost: Handler = async ctx =>  {
   const quizValidation = QuizSchema.safeParse(quizItem)
   if (!quizValidation.success) {
     ctx.data.sentry.setTag('quiz_id', quizId)
-    ctx.data.sentry.captureMessage('Quiz is not valid')
+    ctx.data.sentry.captureMessage('Quiz is not valid', 'critical')
     return new Response('Internal Server Error', { status: 500 })
   }
 
@@ -138,10 +138,10 @@ export const onRequestGet: Handler = async ctx => {
   const quizValidation = QuizSchema.safeParse(quizItem)
   if (!quizValidation.success) {
     ctx.data.sentry.setTag('quiz_id', quizId)
-    ctx.data.sentry.captureMessage('Quiz is not valid')
+    ctx.data.sentry.captureMessage('Quiz is not valid', 'critical')
     return new Response('Internal Server Error', { status: 500 })
   }
-  
+
   const quiz = quizValidation.data
   
   if (quiz.secret !== secret) return new Response('Unauthorized', { status: 401 })
