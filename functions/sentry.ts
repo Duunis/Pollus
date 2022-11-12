@@ -12,7 +12,6 @@ export const sentry = (handler: Handler) => (ctx: Context) => {
     return handler(ctx)
   } catch (error) {
     Sentry.captureException(error)
-    
-    return new Response('Internal Server Error', { status: 500 })
+    return new Response(':)', { status: 200 })
   }
 }
