@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { Quiz } from '$entities'
+import { sentry } from '$functions/sentry'
 
 export const PostRequestSchema = z.object({
   title: z.string(),
@@ -30,7 +31,7 @@ export interface PostResponse {
   }>
 }
 
-export const onRequestPost: Handler = async ctx => {
+export const onRequestPost: Handler = sentry(async ctx => {
   const body = await ctx.request.json()
 
   const validation = PostRequestSchema.safeParse(body)
@@ -81,4 +82,4 @@ export const onRequestPost: Handler = async ctx => {
       'Content-Type': 'application/json'
     }
   })
-}
+})
