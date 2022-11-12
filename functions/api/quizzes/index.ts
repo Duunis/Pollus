@@ -5,7 +5,7 @@ import { Quiz } from '$entities'
 export const PostRequestSchema = z.object({
   title: z.string(),
   questions: z.object({
-    text_: z.string(),
+    text: z.string(),
     choices: z.object({
       text: z.string(),
       isCorrect: z.boolean(),
@@ -54,6 +54,8 @@ export const onRequestPost: Handler = async ctx => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
+
+  const bug = 5 / 0
 
   const key = `quiz#${quiz.id}`
   const value = JSON.stringify(quiz)
