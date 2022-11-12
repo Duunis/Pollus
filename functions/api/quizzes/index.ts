@@ -5,7 +5,7 @@ import { Quiz } from '$entities'
 export const PostRequestSchema = z.object({
   title: z.string(),
   questions: z.object({
-    text: z.string(),
+    text_: z.string(),
     choices: z.object({
       text: z.string(),
       isCorrect: z.boolean(),
