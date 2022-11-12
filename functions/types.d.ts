@@ -2,6 +2,7 @@ export {}
 
 interface Environment {
   SENTRY_DSN: string
+  ENVIRONMENT: 'local' | 'production' | 'preview'
 }
 
 interface Bindings {
