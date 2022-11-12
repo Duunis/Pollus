@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { Answer, Quiz, QuizSchema, Submission } from '$entities'
+import { Answer, Quiz, QuizSchema, Submission, SubmissionSchema } from '$entities'
 
 export const PostRequestSchema = z.object({
   questionId: z.string(),
@@ -58,13 +58,13 @@ const stuff = (quiz: Quiz) => (acc: StuffAccumulator, answer: PostRequest[0]): S
 }
 
 export const onRequestPost: Handler = async ctx =>  {
-  const inputJson = await ctx.request.json()
-  const inputValidation = PostRequestSchema.safeParse(inputJson)
-  if (!inputValidation.success) return new Response(inputValidation.error.message, { status: 400 })
-  const input = inputValidation.data
-
   const quizId = ctx.params.quizId
   if (Array.isArray(quizId)) return new Response('Internal Server Error', { status: 500 })
+
+  const bodyJson = await ctx.request.json()
+  const bodyValidation = PostRequestSchema.safeParse(bodyJson)
+  if (!bodyValidation.success) return new Response(bodyValidation.error.message, { status: 400 })
+  const body = bodyValidation.data
 
   const quizItem = await ctx.env.STORE.get(`quiz#${quizId}`, { type: 'json' })
   if (quizItem === null) return new Response('Quiz not found', { status: 404 })
@@ -72,7 +72,7 @@ export const onRequestPost: Handler = async ctx =>  {
   if (!quizValidation.success) return new Response('Internal Server Error', { status: 500 })
   const quiz = quizValidation.data
 
-  const answersResult = input.reduce(stuff(quiz), { tag: 'ok', answers: [] })
+  const answersResult = body.reduce(stuff(quiz), { tag: 'ok', answers: [] })
   if (answersResult.tag === 'error') return new Response(JSON.stringify(answersResult.errors), { status: 400 })
   const answers = answersResult.answers
 
@@ -86,4 +86,76 @@ export const onRequestPost: Handler = async ctx =>  {
   await ctx.env.STORE.put(submissionKey, submissionJson)
 
   return new Response('OK')
+}
+
+export const GetResponseSchema = z.object({
+  cursor: z.string().optional(),
+  submissions: z.object({
+    id: z.string(),
+    answers: z.object({
+      id: z.string(),
+      questionId: z.string(),
+      choiceId: z.string(),
+      isCorrect: z.boolean(),
+    }).array(),
+  }).array(),
+})
+
+export interface GetResponse {
+  cursor?: string
+  submissions: Array<{
+    id: string
+    answers: Array<{
+      id: string
+      questionId: string
+      choiceId: string
+      isCorrect: boolean
+    }>
+  }>
+}
+
+export const onRequestGet: Handler = async ctx => {
+  const quizId = ctx.params.quizId
+  if (Array.isArray(quizId)) return new Response('Internal Server Error', { status: 500 })
+
+  const secret = ctx.request.headers.get('Authorization')
+  if (secret === null) return new Response('Unauthorized', { status: 401 })
+
+  const url = new URL(ctx.request.url)
+  const cursor = url.searchParams.get('cursor')
+
+  const quizItem = await ctx.env.STORE.get(`quiz#${quizId}`, { type: 'json' })
+  if (quizItem === null) return new Response('Quiz not found', { status: 404 })
+  const quizValidation = QuizSchema.safeParse(quizItem)
+  if (!quizValidation.success) return new Response('Internal Server Error', { status: 500 })
+  const quiz = quizValidation.data
+  
+  if (quiz.secret !== secret) return new Response('Unauthorized', { status: 401 })
+
+  const submissionsListResult = await ctx.env.STORE.list({ prefix: `quiz#${quizId}#submission#`, cursor: cursor })
+  const submissionItems = await Promise.all(submissionsListResult.keys.map(key => ctx.env.STORE.get(key.name, { type: 'json' })))
+  const submissionsValidation = z.array(SubmissionSchema).safeParse(submissionItems)
+  if (!submissionsValidation.success) return new Response('Internal Server Error', { status: 500 })
+  const submissions = submissionsValidation.data
+
+  const response: GetResponse = {
+    cursor: submissionsListResult.cursor,
+    submissions: submissions.map(submission => ({
+      id: submission.id,
+      answers: submission.answers.map(answer => ({
+        id: answer.id,
+        questionId: answer.questionId,
+        choiceId: answer.choiceId,
+        isCorrect: answer.isCorrect,
+      }))
+    }))
+  }
+
+  const responseBody = JSON.stringify(response)
+
+  return new Response(responseBody, {
+    headers: {
+      'Content-Type': 'application/json', 
+    }
+  })
 }
