@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 import { Quiz } from '$entities'
-import { sentry } from '$functions/sentry'
 
 export const PostRequestSchema = z.object({
   title: z.string(),
@@ -31,15 +30,13 @@ export interface PostResponse {
   }>
 }
 
-export const onRequestPost: Handler = sentry(async ctx => {
+export const onRequestPost: Handler = async ctx => {
   const body = await ctx.request.json()
 
   const validation = PostRequestSchema.safeParse(body)
   if (!validation.success) return new Response(validation.error.message, { status: 400 })
 
   const model = validation.data
-
-  throw new Error('Not implemented')
 
   const quiz: Quiz = {
     id: crypto.randomUUID(),
@@ -84,4 +81,4 @@ export const onRequestPost: Handler = sentry(async ctx => {
       'Content-Type': 'application/json'
     }
   })
-})
+}
