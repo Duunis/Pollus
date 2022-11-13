@@ -1,11 +1,27 @@
 import { z } from 'zod'
 
-import { Quiz } from '$entities'
+import { Quiz, Widget } from '$entities'
 
 export const PostRequestSchema = z.object({
   title: z.string(),
   questions: z.object({
     text: z.string(),
+    widgets: z.discriminatedUnion('type', [
+      z.object({
+        type: z.literal('video'),
+        id: z.string()
+      }),
+      z.object({
+        type: z.literal('image'),
+        id: z.string()
+      }),
+      z.object({
+        type: z.literal('code'),
+        id: z.string(),
+        language: z.string(),
+        source: z.string()
+      })
+    ]).array(),
     choices: z.object({
       text: z.string(),
       isCorrect: z.boolean(),
@@ -30,6 +46,28 @@ export interface PostResponse {
   }>
 }
 
+function widget(data: PostRequest['questions'][0]['widgets'][0]): Widget {
+  switch (data.type) {
+    case 'video':
+      return {
+        id: data.id,
+        type: 'video'
+      }
+    case 'image':
+      return {
+        id: data.id,
+        type: 'image'
+      }
+    case 'code':
+      return {
+        id: data.id,
+        type: 'code',
+        language: data.language,
+        source: data.source
+      }
+  }
+}
+
 export const onRequestPost: Handler = async ctx => {
   const bodyJson = await ctx.request.json()
   const bodyValidation = PostRequestSchema.safeParse(bodyJson)
@@ -43,6 +81,7 @@ export const onRequestPost: Handler = async ctx => {
     questions: body.questions.map(question => ({
       id: crypto.randomUUID(),
       text: question.text,
+      widgets: question.widgets.map(widget),
       choices: question.choices.map(choice => ({
         id: crypto.randomUUID(),
         text: choice.text,

@@ -4,7 +4,10 @@ export {}
 
 interface Environment {
   SENTRY_DSN: string
-  ENVIRONMENT: 'local' | 'production' | 'preview'
+  ENVIRONMENT: 
+    | 'local'
+    | 'preview'
+    | 'production' 
 }
 
 interface Bindings {
