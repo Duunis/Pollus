@@ -7,5 +7,9 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "node_modules": true
-  }
+  },
+  "FSharp.inlayHints.typeAnnotations": false,
+  "FSharp.inlayHints.enabled": false,
+  "editor.inlayHints.enabled": "offUnlessPressed",
+  "FSharp.inlayHints.disableLongTooltip": true
 }
