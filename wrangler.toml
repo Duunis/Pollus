@@ -1,0 +1,7 @@
+name = "pollus"
+compatibility_date = "2022-11-05"
+
+[[kv_namespaces]]
+  binding = "STORE"
+  id = "5439892b0b9d4b0590066b55d7bf74b9"
+  preview_id = "dda986e8484b4c72b2901d5f505a7479"
