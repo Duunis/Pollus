@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import ControlButton from '../ControlButton'
 import { SubTitle } from './common'
-import { WidgetType } from './WidgetEditor'
+import WidgetEditor, { WidgetType } from './WidgetEditor'
 
 interface WidgetButtonProps {
   text: string
@@ -25,13 +25,15 @@ const WidgetButton: React.FC<WidgetButtonProps> = ({ text, onClick }) => {
 }
 
 const QuestionWidgets: React.FC = () => {
+  const [widgetEditorOpen, setWidgetEditorOpen] = React.useState<WidgetType | null>(null)
 
   const openWidgetEditor = (widgetType: WidgetType) => {
-
+    setWidgetEditorOpen(widgetType)
   }
 
   return (
     <>
+      {widgetEditorOpen !== null ? <WidgetEditor type={widgetEditorOpen} /> : null}
       <SubTitle>
         Add up to 3 widgets
       </SubTitle>
