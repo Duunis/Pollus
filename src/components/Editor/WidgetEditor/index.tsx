@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Code from './CodeEditor'
 
 export type WidgetType = 'code' | 'image' | 'video'
 
@@ -36,7 +37,9 @@ const WidgetEditorContainer = styled.div`
 const WidgetEditor: React.FC<WidgetEditorProps> = ({ type }) => {
   return (
     <WidgetEditorOverlay>
-      <WidgetEditorContainer></WidgetEditorContainer>
+      <WidgetEditorContainer>
+        <Code />
+      </WidgetEditorContainer>
     </WidgetEditorOverlay>
   )
 }

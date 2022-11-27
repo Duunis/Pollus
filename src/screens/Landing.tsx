@@ -53,10 +53,7 @@ const LandingButtons: React.FC = () => {
 
   return (
     <LandingButtonsContainer>
-      <LandingButton><span>🏗️ Build</span></LandingButton>
-      <LandingButton><span>🛠️ Edit</span></LandingButton>
       <LandingButton onClick={() => navigate('/build')}><span>🏗️ Build</span></LandingButton>
-      <LandingButton onClick={() => navigate('/edit')}><span>🛠️ Edit</span></LandingButton>
     </LandingButtonsContainer>
   )
 }
