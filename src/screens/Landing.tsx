@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 const LandingContainer = styled.div`
@@ -10,7 +11,6 @@ const LandingContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
 `
-
 const LandingButtonsContainer = styled.div`
   display: flex;
   width: 100%;
@@ -18,11 +18,11 @@ const LandingButtonsContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
 `
-
 const LandingButton = styled.button`
   cursor: pointer;
   background: #fff;
   display: block;
+  position: relative;
   width: 20em;
   height: 5em;
   border: none;
@@ -34,7 +34,6 @@ const LandingButton = styled.button`
     font-size: 1.8em;
   }
 `
-
 const Logo: React.FC = () => {
   return (
     <svg width="416" height="144" viewBox="0 0 416 144" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,14 +49,14 @@ const Logo: React.FC = () => {
 }
 
 const LandingButtons: React.FC = () => {
+  const navigate = useNavigate()
+
   return (
     <LandingButtonsContainer>
-      <LandingButton><span>🏗️ Build</span></LandingButton>
-      <LandingButton><span>🛠️ Edit</span></LandingButton>
+      <LandingButton onClick={() => navigate('/build')}><span>🏗️ Build</span></LandingButton>
     </LandingButtonsContainer>
   )
 }
-
 const Landing: React.FC = () => {
   return (
     <LandingContainer>
@@ -66,5 +65,4 @@ const Landing: React.FC = () => {
     </LandingContainer>
   )
 }
-
 export default Landing
